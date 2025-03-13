@@ -282,7 +282,93 @@ FakesAssemblies/
 
 # GhostDoc plugin setting file
 *.GhostDoc.xml
+# Dependencies
+/packages/
+bin/
+obj/
 
+# NuGet Packages
+*.nupkg
+
+# Visual Studio cache files
+.vs/
+*.suo
+*.user
+
+# Build output
+bin/
+obj/
+TestResults/
+
+# ASP.NET Core
+*.log
+*.lock.json
+node_modules/
+wwwroot/lib/
+wwwroot/css/site.min.css
+wwwroot/js/site.min.js
+
+# Entity Framework
+migrations/
+*.mdf
+*.ldf
+
+# User-specific files
+*.sdf
+*.dbmdl
+
+# Runtime data
+app_data/
+logs/
+
+# Diagnostics
+*.db
+*.db-shm
+*.db-wal
+
+# SQL Server files
+*.mdf
+*.ldf
+
+# Local application data
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+bld/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Secrets and sensitive files
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json
+secrets.json
+*.pfx
+*.pubxml
+*.pubxml.user
+
+# Docker
+Dockerfile.local
+*.tar
+
+# Test files
+*.Tests.dll
+*.Tests.pdb
+
+# Ignore specific files in the project
+*.csproj.user
+*.sln.docstates
+
+# Environment-specific files
+.env
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
