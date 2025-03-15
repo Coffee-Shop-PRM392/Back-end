@@ -9,7 +9,23 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
-
+// Thêm CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+    // Nếu bạn muốn cấu hình cụ thể hơn, có thể thay bằng:
+    // options.AddPolicy("AllowSpecific", builder =>
+    // {
+    //     builder.WithOrigins("http://example.com", "http://localhost:3000")
+    //            .WithMethods("GET", "POST", "PUT", "DELETE")
+    //            .WithHeaders("Authorization", "Content-Type");
+    // });
+});
 // Add services to the container.
 // Thêm DbContext với MySQL
 builder.Services.AddDbContext<CoffeeSalesContext>(options =>
@@ -78,6 +94,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Thêm middleware CORS vào pipeline
+app.UseCors("AllowAll"); // Sử dụng policy "AllowAll" đã định nghĩa ở trên
+// Nếu dùng policy cụ thể thì thay bằng: app.UseCors("AllowSpecific");
 app.UseAuthentication();
 app.UseAuthorization();
 
