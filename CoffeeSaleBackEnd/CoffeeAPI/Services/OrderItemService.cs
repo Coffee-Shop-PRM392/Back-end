@@ -10,6 +10,7 @@ namespace CoffeeAPI.Services
         Task<OrderItem> CreateOrderItemAsync(OrderItem orderItem);
         Task DeleteOrderItemAsync(int orderItemId);
     }
+
     public class OrderItemService : IOrderItemService
     {
         private readonly IOrderItemRepository _orderItemRepository;
@@ -31,20 +32,29 @@ namespace CoffeeAPI.Services
 
         public async Task<OrderItem> CreateOrderItemAsync(OrderItem orderItem)
         {
-            // Logic nghiệp vụ: Kiểm tra số lượng
+            // Logic nghiệp vụ: Kiểm tra số lượng và các tùy chọn
             if (orderItem.Quantity <= 0)
             {
                 throw new ArgumentException("Quantity must be greater than 0.");
             }
+            if (orderItem.PriceAtPurchase <= 0)
+            {
+                throw new ArgumentException("Price at purchase must be greater than 0.");
+            }
+            if (string.IsNullOrEmpty(orderItem.SelectedSize) || string.IsNullOrEmpty(orderItem.IceLevel) || string.IsNullOrEmpty(orderItem.SugarLevel))
+            {
+                throw new ArgumentException("Size, ice level, and sugar level must be specified.");
+            }
 
             await _orderItemRepository.AddAsync(orderItem);
             await _orderItemRepository.SaveChangesAsync();
-            return await _orderItemRepository.GetByIdAsync(orderItem.OrderItemId, includeProperties: "Product");
+            return await _orderItemRepository.GetByIdAsync(orderItem.OrderItemId, includeProperties: "Product,Product.ProductSizes");
         }
 
         public async Task DeleteOrderItemAsync(int orderItemId)
         {
-            var orderItem = await _orderItemRepository.GetByIdAsync(orderItemId, includeProperties: "Product"); if (orderItem == null)
+            var orderItem = await _orderItemRepository.GetByIdAsync(orderItemId, includeProperties: "Product,Product.ProductSizes");
+            if (orderItem == null)
             {
                 throw new KeyNotFoundException("OrderItem not found.");
             }

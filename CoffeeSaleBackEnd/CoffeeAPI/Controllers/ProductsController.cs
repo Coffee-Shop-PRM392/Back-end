@@ -113,6 +113,10 @@ public class ProductsController : ControllerBase
         {
             return NotFound();
         }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}/status")]

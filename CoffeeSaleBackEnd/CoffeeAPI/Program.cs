@@ -60,7 +60,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Configure JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"];
-var key = Encoding.ASCII.GetBytes(jwtSecret);
+var key = Encoding.ASCII.GetBytes(s: jwtSecret);
 
 builder.Services.AddAuthentication(options =>
 {

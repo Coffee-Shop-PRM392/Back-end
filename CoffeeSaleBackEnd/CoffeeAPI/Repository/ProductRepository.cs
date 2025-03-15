@@ -7,18 +7,12 @@ namespace CoffeeAPI.Repository
     public interface IProductRepository : IGenericRepository<Product>
     {
         Task<Product> GetByIdAsync(int id, string includeProperties = null);
-        // Lấy danh sách sản phẩm theo danh mục
         Task<IEnumerable<Product>> GetByCategoryAsync(int categoryId, string includeProperties = null);
-        // Lấy sản phẩm theo trạng thái (in_stock/out_of_stock)
         Task<IEnumerable<Product>> GetByStatusAsync(string status, string includeProperties = null);
-        // Tìm kiếm sản phẩm theo tên (bao gồm tìm kiếm không phân biệt hoa thường)
         Task<IEnumerable<Product>> SearchByNameAsync(string name, string includeProperties = null);
-        // Lấy sản phẩm bán chạy nhất (giả sử dựa trên số lượng đã bán)
         Task<Product> GetBestSellerAsync(string includeProperties = null);
-        // Cập nhật trạng thái sản phẩm (in_stock/out_of_stock)
         Task UpdateProductStatusAsync(int productId, string status);
     }
-
 
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
@@ -28,22 +22,41 @@ namespace CoffeeAPI.Repository
         {
             _orderItemRepository = orderItemRepository;
         }
+
         public async Task<Product> GetByIdAsync(int id, string includeProperties = null)
         {
+            // Mặc định bao gồm ProductSizes
+            string defaultIncludes = "ProductSizes";
+            includeProperties = string.IsNullOrEmpty(includeProperties)
+                ? defaultIncludes
+                : $"{defaultIncludes},{includeProperties}";
             return await Get(p => p.ProductId == id, includeProperties: includeProperties).FirstOrDefaultAsync();
         }
+
         public async Task<IEnumerable<Product>> GetByCategoryAsync(int categoryId, string includeProperties = null)
         {
+            string defaultIncludes = "ProductSizes";
+            includeProperties = string.IsNullOrEmpty(includeProperties)
+                ? defaultIncludes
+                : $"{defaultIncludes},{includeProperties}";
             return await Get(p => p.CategoryId == categoryId, includeProperties: includeProperties).ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetByStatusAsync(string status, string includeProperties = null)
         {
+            string defaultIncludes = "ProductSizes";
+            includeProperties = string.IsNullOrEmpty(includeProperties)
+                ? defaultIncludes
+                : $"{defaultIncludes},{includeProperties}";
             return await Get(p => p.Status == status, includeProperties: includeProperties).ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> SearchByNameAsync(string name, string includeProperties = null)
         {
+            string defaultIncludes = "ProductSizes";
+            includeProperties = string.IsNullOrEmpty(includeProperties)
+                ? defaultIncludes
+                : $"{defaultIncludes},{includeProperties}";
             return await Get(p => p.Name.ToLower().Contains(name.ToLower()), includeProperties: includeProperties).ToListAsync();
         }
 
@@ -62,12 +75,16 @@ namespace CoffeeAPI.Repository
                 return null;
             }
 
+            string defaultIncludes = "ProductSizes";
+            includeProperties = string.IsNullOrEmpty(includeProperties)
+                ? defaultIncludes
+                : $"{defaultIncludes},{includeProperties}";
             return await GetByIdAsync(bestSeller.ProductId, includeProperties);
         }
 
         public async Task UpdateProductStatusAsync(int productId, string status)
         {
-            var product = await GetByIdAsync(productId, includeProperties: "Category");
+            var product = await GetByIdAsync(productId, "Category");
             if (product != null)
             {
                 product.Status = status;

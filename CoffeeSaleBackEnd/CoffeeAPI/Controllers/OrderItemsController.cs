@@ -1,6 +1,5 @@
 ﻿using CoffeeAPI.Models;
 using CoffeeAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using System.Threading.Tasks;

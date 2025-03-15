@@ -27,6 +27,14 @@ namespace CoffeeAPI.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal PriceAtPurchase { get; set; }
 
-        public string? Customizations { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string SelectedSize { get; set; }  // "S", "M", "L"
+
+        [StringLength(20)]
+        public string IceLevel { get; set; } = "normal";  // "low", "none", "normal"
+
+        [StringLength(20)]
+        public string SugarLevel { get; set; } = "normal";  // "low", "none", "normal"
     }
 }
