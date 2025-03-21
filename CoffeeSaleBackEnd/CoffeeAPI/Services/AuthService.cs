@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BCrypt.Net;  // Thêm namespace này
 
 namespace CoffeeAPI.Services
 {
@@ -13,6 +14,7 @@ namespace CoffeeAPI.Services
         Task<Users> GetUserByEmailAsync(string email);
         Task<string> LoginAsync(string email, string password);
     }
+
     public class AuthService : IAuthService
     {
         private readonly CoffeeSalesContext _context;
@@ -40,9 +42,8 @@ namespace CoffeeAPI.Services
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
 
-            // Kiểm tra password (giả sử password đã được hash)
-            // Ở đây mình dùng so sánh trực tiếp để đơn giản, trong thực tế bạn nên hash password
-            if (user.Password != password) // Thay thế bằng logic hash nếu có
+            // Kiểm tra password đã hash bằng BCrypt
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }

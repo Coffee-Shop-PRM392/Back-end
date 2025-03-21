@@ -20,7 +20,7 @@
 
             public string? Description { get; set; }
 
-            [StringLength(255)]
+            [StringLength(800)]
             public string? ImageUrl { get; set; }
 
             [StringLength(20)]

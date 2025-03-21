@@ -51,7 +51,7 @@ namespace CoffeeAPI.Services
             }
 
             // Logic nghiệp vụ: Mã hóa mật khẩu (giả sử dùng BCrypt)
-            // user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
@@ -78,7 +78,7 @@ namespace CoffeeAPI.Services
         public async Task DeleteUserAsync(int userId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null)
+            if (user == null)   
             {
                 throw new KeyNotFoundException("User not found.");
             }
