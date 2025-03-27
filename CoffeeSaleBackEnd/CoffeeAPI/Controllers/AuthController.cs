@@ -24,10 +24,11 @@ namespace CoffeeAPI.Controllers
             try
             {
                 var token = await _authService.LoginAsync(loginRequest.Email, loginRequest.Password);
-                //var user = await _authService.GetUserByEmailAsync(loginRequest.Email); // Giả sử bạn thêm phương thức này nếu cần
+                var user = await _authService.GetUserByEmailAsync(loginRequest.Email); // Giả sử bạn thêm phương thức này nếu cần
 
                 var response = new LoginResponseDto
                 {
+                    UserId = user.UserId,
                     Token = token,
                 };
 
