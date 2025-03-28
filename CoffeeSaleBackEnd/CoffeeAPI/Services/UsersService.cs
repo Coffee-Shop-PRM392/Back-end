@@ -67,6 +67,7 @@ namespace CoffeeAPI.Services
             }
 
             // Cập nhật các thuộc tính cần thiết
+            existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             existingUser.Email = user.Email;
             existingUser.PhoneNumber = user.PhoneNumber;
             existingUser.Role = user.Role;
