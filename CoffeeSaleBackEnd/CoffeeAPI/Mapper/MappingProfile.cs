@@ -57,6 +57,7 @@ namespace CoffeeAPI.Mapping
                 .ForMember(dest => dest.SugarLevel, opt => opt.MapFrom(src => src.SugarLevel));
 
             CreateMap<Cart, CartResponseDto>()
+                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.SelectedSize, opt => opt.MapFrom(src => src.SelectedSize))
                 .ForMember(dest => dest.IceLevel, opt => opt.MapFrom(src => src.IceLevel))
