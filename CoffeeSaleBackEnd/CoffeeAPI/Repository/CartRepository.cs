@@ -30,7 +30,7 @@ namespace CoffeeAPI.Repository
 
         public async Task<IEnumerable<Cart>> GetByUserAsync(int userId)
         {
-            return await Get(c => c.UserId == userId, includeProperties: "User,Product,Product.ProductSizes, SelectedSize, IceLevel, SugarLevel").ToListAsync();
+            return await Get(c => c.UserId == userId, includeProperties: "User,Product,Product.ProductSizes").ToListAsync();
         }
 
         public async Task ClearCartAsync(int userId)
@@ -66,7 +66,7 @@ namespace CoffeeAPI.Repository
 
         public async Task<bool> UpdateCartItemAsync(int cartId, string selectedSize, string iceLevel, string sugarLevel, int quantity)
         {
-            var cartItem = await GetByIdAsync(cartId, includeProperties: "SelectedSize, IceLevel, SugarLevel");
+            var cartItem = await GetByIdAsync(cartId);
             if (cartItem != null)
             {
                 cartItem.SelectedSize = selectedSize;
