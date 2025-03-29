@@ -9,6 +9,7 @@ namespace CoffeeAPI.Services
         Task<IEnumerable<OrderItem>> GetOrderItemsByProductAsync(int productId);
         Task<OrderItem> CreateOrderItemAsync(OrderItem orderItem);
         Task DeleteOrderItemAsync(int orderItemId);
+        Task<OrderItem> UpdateOrderItemAsync(int orderItemId, string selectedSize, string iceLevel, string sugarLevel, int quantity);
     }
 
     public class OrderItemService : IOrderItemService
@@ -61,6 +62,24 @@ namespace CoffeeAPI.Services
 
             _orderItemRepository.Delete(orderItem);
             await _orderItemRepository.SaveChangesAsync();
+        }
+        public async Task<OrderItem> UpdateOrderItemAsync(int orderItemId, string selectedSize, string iceLevel, string sugarLevel, int quantity)
+        {
+            var orderItem = await _orderItemRepository.GetByIdAsync(orderItemId);
+            if (orderItem == null)
+            {
+                throw new KeyNotFoundException("Order item not found.");
+            }
+
+            orderItem.SelectedSize = selectedSize;
+            orderItem.IceLevel = iceLevel;
+            orderItem.SugarLevel = sugarLevel;
+            orderItem.Quantity = quantity;
+
+            _orderItemRepository.Update(orderItem);
+            await _orderItemRepository.SaveChangesAsync();
+
+            return orderItem;
         }
     }
 }
