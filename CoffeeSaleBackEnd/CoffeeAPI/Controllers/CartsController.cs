@@ -83,5 +83,30 @@ namespace CoffeeAPI.Controllers
                 return NotFound();
             }
         }
+        [HttpPut("{cartId}/update")]
+        public async Task<IActionResult> UpdateCartItem(int cartId, [FromBody] UpdateCartDto updateCartDto)
+        {
+            try
+            {
+                var updatedCart = await _cartService.UpdateCartItemAsync(
+                    cartId,
+                    updateCartDto.SelectedSize,
+                    updateCartDto.IceLevel,
+                    updateCartDto.SugarLevel,
+                    updateCartDto.Quantity
+                );
+
+                var cartResponse = _mapper.Map<CartResponseDto>(updatedCart);
+                return Ok(cartResponse);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Cart item not found");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
