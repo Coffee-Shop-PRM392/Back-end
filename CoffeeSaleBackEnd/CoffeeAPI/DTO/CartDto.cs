@@ -35,4 +35,12 @@
         public string SugarLevel { get; set; }  // "low", "none", "normal"
         public DateTime AddedAt { get; set; }
     }
+    public class UpdateCartDto
+    {
+        public string SelectedSize { get; set; }
+        public string IceLevel { get; set; }
+        public string SugarLevel { get; set; }
+        public int Quantity { get; set; }
+    }
+
 }

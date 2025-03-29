@@ -1,4 +1,5 @@
 ﻿using CoffeeAPI.Datas;
+using CoffeeAPI.DTO;
 using CoffeeAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,8 @@ namespace CoffeeAPI.Repository
         Task UpdateQuantityAsync(int cartId, int quantity);
         // Thêm phương thức mới để lấy Cart theo Product và tùy chọn
         Task<Cart> GetByProductAndOptionsAsync(int userId, int productId, string size, string iceLevel, string sugarLevel);
+        Task<bool> UpdateCartItemAsync(int cartId, string selectedSize, string iceLevel, string sugarLevel, int quantity);
+
     }
 
     public class CartRepository : GenericRepository<Cart>, ICartRepository
@@ -27,7 +30,7 @@ namespace CoffeeAPI.Repository
 
         public async Task<IEnumerable<Cart>> GetByUserAsync(int userId)
         {
-            return await Get(c => c.UserId == userId, includeProperties: "User,Product,Product.ProductSizes").ToListAsync();
+            return await Get(c => c.UserId == userId, includeProperties: "User,Product,Product.ProductSizes, SelectedSize, IceLevel, SugarLevel").ToListAsync();
         }
 
         public async Task ClearCartAsync(int userId)
@@ -59,6 +62,22 @@ namespace CoffeeAPI.Repository
                 && c.IceLevel == iceLevel
                 && c.SugarLevel == sugarLevel,
                 includeProperties: "Product,Product.ProductSizes").FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> UpdateCartItemAsync(int cartId, string selectedSize, string iceLevel, string sugarLevel, int quantity)
+        {
+            var cartItem = await GetByIdAsync(cartId, includeProperties: "SelectedSize, IceLevel, SugarLevel");
+            if (cartItem != null)
+            {
+                cartItem.SelectedSize = selectedSize;
+                cartItem.IceLevel = iceLevel;
+                cartItem.SugarLevel = sugarLevel;
+                cartItem.Quantity = quantity;
+                Update(cartItem);
+                await SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

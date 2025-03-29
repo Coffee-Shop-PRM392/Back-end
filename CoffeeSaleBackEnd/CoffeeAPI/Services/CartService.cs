@@ -10,6 +10,7 @@ namespace CoffeeAPI.Services
         Task<Cart> UpdateCartQuantityAsync(int cartId, int quantity);
         Task ClearCartAsync(int userId);
         Task RemoveFromCartAsync(int cartId);
+        Task<Cart> UpdateCartItemAsync(int cartId, string selectedSize, string iceLevel, string sugarLevel, int quantity);
     }
 
     public class CartService : ICartService
@@ -85,6 +86,15 @@ namespace CoffeeAPI.Services
 
             _cartRepository.Delete(cartItem);
             await _cartRepository.SaveChangesAsync();
+        }
+
+        public async Task<Cart> UpdateCartItemAsync(int cartId, string selectedSize, string iceLevel, string sugarLevel, int quantity)
+        {
+            var updatedCart = await _cartRepository.UpdateCartItemAsync(cartId, selectedSize, iceLevel, sugarLevel, quantity);
+            if (!updatedCart)
+                throw new KeyNotFoundException("Cart item not found");
+
+            return await _cartRepository.GetByIdAsync(cartId);
         }
     }
 }

@@ -37,4 +37,12 @@
         public string IceLevel { get; set; }  // "low", "none", "normal"
         public string SugarLevel { get; set; }  // "low", "none", "normal"
     }
+
+    public class UpdateOrderItemDTO
+    {
+        public int OrderItemId { get; set; }
+        public string SelectedSize { get; set; } = string.Empty;
+        public int IceLevel { get; set; }
+        public int SugarLevel { get; set; }
+    }
 }
