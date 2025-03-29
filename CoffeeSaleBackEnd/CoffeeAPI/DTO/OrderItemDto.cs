@@ -38,11 +38,11 @@
         public string SugarLevel { get; set; }  // "low", "none", "normal"
     }
 
-    public class UpdateOrderItemDTO
+    public class UpdateOrderItemDto
     {
-        public int OrderItemId { get; set; }
         public string SelectedSize { get; set; } = string.Empty;
-        public int IceLevel { get; set; }
-        public int SugarLevel { get; set; }
+        public string IceLevel { get; set; }
+        public string SugarLevel { get; set; }
+        public int Quantity { get; set; }
     }
 }

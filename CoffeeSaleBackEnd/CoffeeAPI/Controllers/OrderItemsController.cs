@@ -65,5 +65,30 @@ namespace CoffeeAPI.Controllers
                 return NotFound();
             }
         }
+        [HttpPut("{orderItemId}/update")]
+        public async Task<IActionResult> UpdateOrderItem(int orderItemId, [FromBody] UpdateOrderItemDto updateOrderItemDto)
+        {
+            try
+            {
+                var updatedOrderItem = await _orderItemService.UpdateOrderItemAsync(
+                    orderItemId,
+                    updateOrderItemDto.SelectedSize,
+                    updateOrderItemDto.IceLevel,
+                    updateOrderItemDto.SugarLevel,
+                    updateOrderItemDto.Quantity
+                );
+
+                var orderItemResponse = _mapper.Map<OrderItemResponseDto>(updatedOrderItem);
+                return Ok(orderItemResponse);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Order item not found");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
